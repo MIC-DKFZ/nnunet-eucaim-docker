@@ -11,9 +11,9 @@ ARG MULTI_MODAL=False
 LABEL maintainer="ashis.ravindran@dkfz-heidelberg.de"
 LABEL version="1.0"
 LABEL description="nnUNet model pretrained on Task029_LiTS targeting are liver and liver tumor."
-LABEL image.source="https://github.com/MIC-DKFZ/nnUNet/blob/nnunetv1/"
-LABEL image.revision="db16c6cef5fdd5a180159184e46b58bcca670446"
-LABEL image.version="1.7.1"
+LABEL image.source="https://github.com/MIC-DKFZ/nnunet-eucaim-docker"
+LABEL image.revision=""
+LABEL image.version="1.0"
 
 USER eucaim
 ENV TASK_NAME=Task029_LiTS

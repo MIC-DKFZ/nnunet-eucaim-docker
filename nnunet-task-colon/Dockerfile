@@ -10,10 +10,10 @@ ARG MULTI_MODAL=False
 # Maintainer information
 LABEL maintainer="ashis.ravindran@dkfz-heidelberg.de"
 LABEL version="1.0"
-LABEL description="nnUNet model pretrained on Task010_Colon targeting are colon caner primaries."
-LABEL image.source="https://github.com/MIC-DKFZ/nnUNet/blob/nnunetv1/"
-LABEL image.revision="db16c6cef5fdd5a180159184e46b58bcca670446"
-LABEL image.version="1.7.1"
+LABEL description="nnUNet model pretrained on Task010_Colon targeting are colon cancer primaries."
+LABEL image.source="https://github.com/MIC-DKFZ/nnunet-eucaim-docker"
+LABEL image.revision=""
+LABEL image.version="1.0"
 
 USER eucaim
 ENV TASK_NAME=Task010_Colon

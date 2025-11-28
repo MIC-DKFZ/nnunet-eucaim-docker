@@ -10,7 +10,7 @@ FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04
 LABEL maintainer="ashis.ravindran@dkfz-heidelberg.de"
 LABEL version="1.0"
 LABEL description="nnU-Net is a machine learning based semantic segmentation method."
-LABEL image.source="https://github.com/MIC-DKFZ/nnUNet/tree/nnunetv1"
+LABEL image.source="https://github.com/MIC-DKFZ/nnunet-eucaim-docker"
 LABEL image.revision="commit-sha"
 LABEL image.version="tag-or-version"
 ENV PYTHONUNBUFFERED=1
