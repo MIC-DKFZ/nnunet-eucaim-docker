@@ -31,14 +31,36 @@ Each container expects two mounted directories for I/O:
 * Input: `/home/eucaim/nnUNet_input`
 * Output: `/home/eucaim/nnUNet_output`
 
-Your `.nii.gz` files should be placed inside the input directory. The container processes them sequentially and writes the segmentation outputs to the output directory using the same filenames.
+Your DICOM series folders containing `.dcm` files should be placed inside the input directory. The container processes them sequentially and writes the segmentation outputs to the output directory using the same filenames.
+
+Expected dataset structure:
+```
+dataset/
+├── study_001/
+│   ├── series_001/
+│   │   ├── IMG0001.dcm
+│   │   ├── IMG0002.dcm
+│   │   └── ...
+│   ├── series_002/
+│   │   ├── IMG0001.dcm
+│   │   ├── IMG0002.dcm
+│   │   └── ...
+│   └── ...
+├── study_002/
+│   ├── series_001/
+│   │   ├── IMG0001.dcm
+│   │   ├── IMG0002.dcm
+│   │   └── ...
+│   └── ...
+└── ...
+```
 
 ### Example
 
-To run inference using the image for Task002_Heart, execute:
+To run inference using the image for Liver Tumor, execute:
 ```bash
 docker run \
-  -v /host/data_input:/home/eucaim/nnUNet_input \
+  -v /host/dataset/study_001:/home/eucaim/nnUNet_input \
   -v /host/data_out:/home/eucaim/nnUNet_output \
   --gpus all \
   nnunet-liver-tumour:latest
@@ -48,15 +70,6 @@ docker run \
 * All input must as DICOM series folders.
 * All files in the input folder will be processed in batch.
 * Output files are written with identical filenames into the output folder.
-
-### File Naming
-
-* Mono-modal tasks (e.g., `nnunet-liver-tumour`)
-The container automatically adjusts file names if needed, so the user can provide files with simple names like `image01.nii.gz`.
-
-
-For detailed guidelines, refer to the [nnUNet data format documentation](https://github.com/MIC-DKFZ/nnUNet/blob/nnunetv1/documentation/data_format_inference.md).
-
 
 ## Notes
 A patched version nnUNet source is placed in the `nnunet-base` folder for installation purposes at build time. As soon as the issue https://github.com/MIC-DKFZ/nnUNet/issues/2876 is fixed, direct git clone from official would be possible.

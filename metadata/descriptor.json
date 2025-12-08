@@ -14,7 +14,7 @@
       "id": "input_folder",
       "name": "Input Directory",
       "type": "Directory",
-      "description": "Host path containing input NIfTI files",
+      "description": "Host path containing folders of DICOM series",
       "value-key": "/image/nnUNet_input",
       "path-template": "input"
     },
@@ -31,8 +31,8 @@
     {
       "id": "predicted_segmentations",
       "name": "Predicted Segmentations",
-      "description": "NIfTI output files",
-      "path-template": "/image/nnUNet_output/*.nii.gz"
+      "description": "DICOM SEG output files",
+      "path-template": "/image/nnUNet_output/*.dcm"
     }
   ],
   "custom": {
