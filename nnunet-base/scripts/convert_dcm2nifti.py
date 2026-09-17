@@ -16,7 +16,6 @@ nnunet_output_dir = os.getenv("nnUNet_output")
 def process_input_file(dcm_series_paths:list, convert_output_dir:Path, json_output_dir:Path):
     global execution_timeout, convert_to
     for dcm_series_path in dcm_series_paths:
-        print(dcm_series_path)
         input_filepath = list(dcm_series_path.glob("*.dcm"))[0]
         try:
             # Try to get the SeriesInstanceUID from the dicom file
@@ -35,6 +34,7 @@ def process_input_file(dcm_series_paths:list, convert_output_dir:Path, json_outp
         seg_out_filename  = join(
             json_output_dir, incoming_dcm_series_id + convert_to)
         
+        print(f"Processing series {incoming_dcm_series_id}")
         generate_json.create_mitklabel_json(seg_out_filename, dcm_series_path, json_filepath)
 
         if not exists(output_filepath):
@@ -45,7 +45,7 @@ def process_input_file(dcm_series_paths:list, convert_output_dir:Path, json_outp
                 "-o",
                 output_filepath
             ]
-            print(command)
+            print(f"Converting series {incoming_dcm_series_id} to NIfTI")
             output = run(
                 command,
                 stdout=PIPE,

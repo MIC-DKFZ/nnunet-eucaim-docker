@@ -25,9 +25,9 @@ def get_sorted_reference_files(dicom_folder_path):
                 z_pos = float(image_position[2])
                 z_sorted.append((z_pos, os.path.abspath(fpath)))
             else:
-                print(f"Skipping file (no z pos): {fpath}")
+                print(f"Skipping file (no z pos): {os.path.basename(fpath)}")
         except InvalidDicomError:
-            print(f"Skipping invalid DICOM file: {fpath}")
+            print(f"Skipping invalid DICOM file: {os.path.basename(fpath)}")
     z_sorted.sort(key=lambda tup: tup[0])
     reference_files = [[i, path] for i, (_, path) in enumerate(z_sorted)]
     return reference_files
