@@ -32,7 +32,7 @@ def convert_to_dcmseg(json_file_path: Path):
 
     # get nifti file name
    
-    output_filepath = json_file_path.parent.parent
+    output_filepath = json_file_path.parent.parent / 'segmentations'
     dcm_output_filepath = join(
         output_filepath, file_id + convert_to
     )
@@ -59,6 +59,7 @@ def convert_to_dcmseg(json_file_path: Path):
         print(output.stderr)
 
 if __name__ == "__main__":
+    Path(dataset_dir).joinpath('segmentations').mkdir(parents=True, exist_ok=True)
     nnUNet_seg_dir = Path(dataset_dir).joinpath('tmp')
     mitk_json_filepaths = list(nnUNet_seg_dir.rglob("*.mitklabel.json"))
     for mitk_json_file in mitk_json_filepaths:
