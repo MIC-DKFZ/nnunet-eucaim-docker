@@ -9,11 +9,11 @@ ARG MULTI_MODAL=False
 
 # Maintainer information
 LABEL maintainer="ashis.ravindran@dkfz-heidelberg.de"
-LABEL version="1.0"
+LABEL version="1.0.0"
 LABEL description="nnUNet model pretrained on Task135_KiTS2021 targeting are kidney, tumor and cyst."
-LABEL image.source="hhttps://github.com/MIC-DKFZ/nnunet-eucaim-docker"
+LABEL image.source="https://github.com/MIC-DKFZ/nnunet-eucaim-docker"
 LABEL image.revision=""
-LABEL image.version="1.0"
+LABEL image.version="1.0.0"
 
 USER eucaim
 ENV TASK_NAME=Task135_KiTS2021
