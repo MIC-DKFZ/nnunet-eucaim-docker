@@ -3,8 +3,8 @@
 
 # Dockerfile for nnUNet task images
 # Author: Ashis Ravindran, DKFZ
-# Builds image nnunet:base
-FROM nnunet:base
+# Built on top of image nnunet:base-1.0.0
+FROM nnunet:base-1.0.0
 ARG TASK_NAME
 ARG MULTI_MODAL=False
 
@@ -16,13 +16,13 @@ LABEL image.source=""
 LABEL image.revision="commit-sha"
 LABEL image.version="tag-or-version"
 
-USER eucaim
 ENV TASK_NAME=$TASK_NAME
 ENV MULTI_MODAL=$MULTI_MODAL
 RUN nnUNet_download_pretrained_model $TASK_NAME
 
 CMD ["/bin/bash", "/app/start_nnunet.sh" ]
-HEALTHCHECK --interval=60s --timeout=10s --retries=3 CMD python /app/scripts/health_check.py || exit 1
+HEALTHCHECK --interval=60s --timeout=10s --start-period=300s --retries=3 \
+  CMD python /app/scripts/health_check.py || exit 1
 
 # Commands:
 # docker build -t nnunet:heart --build-arg TASK_NAME=Task002_Heart .
