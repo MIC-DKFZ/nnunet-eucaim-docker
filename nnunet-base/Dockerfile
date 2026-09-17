@@ -21,7 +21,7 @@ ARG USER_GID=2323
 
 # Create non-root user and group, and prevent login
 RUN groupadd -g $USER_GID eucaim && \
-    useradd -l -r -u $USER_GID -g eucaim -d /home/eucaim -m -s /usr/sbin/nologin eucaim
+    useradd -l -r -u $USER_UID -g eucaim -d /home/eucaim -m -s /usr/sbin/nologin eucaim
 
 RUN apt-get update && apt-get install -y --no-install-recommends\
     git \
