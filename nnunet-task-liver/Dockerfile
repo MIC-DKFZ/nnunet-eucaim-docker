@@ -19,7 +19,8 @@ ENV TASK_NAME=Task029_LiTS
 ENV MULTI_MODAL=$MULTI_MODAL
 # The pretrained model is published with a different capitalisation than the
 # one the nnU-Net runtime looks up (Task029_LITS vs Task029_LiTS).
-RUN nnUNet_download_pretrained_model $TASK_NAME
+RUN nnUNet_download_pretrained_model $TASK_NAME \
+    && chown -R eucaim:eucaim $RESULTS_FOLDER
 RUN set -eu; \
     root="$RESULTS_FOLDER/nnUNet"; \
     for d in "$root"/*/; do \

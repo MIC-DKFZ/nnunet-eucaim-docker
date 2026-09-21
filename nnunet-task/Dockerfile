@@ -18,7 +18,8 @@ LABEL image.version="tag-or-version"
 
 ENV TASK_NAME=$TASK_NAME
 ENV MULTI_MODAL=$MULTI_MODAL
-RUN nnUNet_download_pretrained_model $TASK_NAME
+RUN nnUNet_download_pretrained_model $TASK_NAME \
+    && chown -R eucaim:eucaim $RESULTS_FOLDER
 
 CMD ["/bin/bash", "/app/start_nnunet.sh" ]
 HEALTHCHECK --interval=60s --timeout=10s --start-period=300s --retries=3 \
