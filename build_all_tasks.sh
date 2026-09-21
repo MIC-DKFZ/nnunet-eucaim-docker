@@ -25,7 +25,7 @@ GID=${2:-1000}
 docker build \
     --build-arg USER_UID=$UID\
     --build-arg USER_GID=$GID\
-    -t "nnunet:base" nnunet-base/
+    -t "nnunet:base-1.0.0" nnunet-base/
 echo "nnUNet base image build finshed"
 
 # Build each task-specific image

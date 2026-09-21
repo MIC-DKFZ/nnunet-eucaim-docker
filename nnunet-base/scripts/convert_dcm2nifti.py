@@ -16,7 +16,6 @@ nnunet_output_dir = os.getenv("nnUNet_output")
 def process_input_file(dcm_series_paths:list, convert_output_dir:Path, json_output_dir:Path):
     global execution_timeout, convert_to
     for dcm_series_path in dcm_series_paths:
-        print(dcm_series_path)
         input_filepath = list(dcm_series_path.glob("*.dcm"))[0]
         try:
             # Try to get the SeriesInstanceUID from the dicom file
@@ -35,6 +34,7 @@ def process_input_file(dcm_series_paths:list, convert_output_dir:Path, json_outp
         seg_out_filename  = join(
             json_output_dir, incoming_dcm_series_id + convert_to)
         
+        print(f"Processing series {incoming_dcm_series_id}")
         generate_json.create_mitklabel_json(seg_out_filename, dcm_series_path, json_filepath)
 
         if not exists(output_filepath):
@@ -45,7 +45,7 @@ def process_input_file(dcm_series_paths:list, convert_output_dir:Path, json_outp
                 "-o",
                 output_filepath
             ]
-            print(command)
+            print(f"Converting series {incoming_dcm_series_id} to NIfTI")
             output = run(
                 command,
                 stdout=PIPE,
@@ -60,7 +60,9 @@ def process_input_file(dcm_series_paths:list, convert_output_dir:Path, json_outp
 
 if __name__ == "__main__":
     folder = Path(dataset_dir)
-    subfolders = [f for f in folder.iterdir() if f.is_dir()]
+    subfolders = sorted({p.parent for p in folder.rglob('*.dcm')})
+    if not subfolders:
+        raise SystemExit(f'no *.dcm files found under {folder}')
     
     nnUNet_data_dir = Path(nnunet_output_dir).joinpath('nnunet_data_dir')
     nnUNet_data_dir.mkdir(exist_ok=True)

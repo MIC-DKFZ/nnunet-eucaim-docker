@@ -8,11 +8,11 @@ FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04
 
 # Maintainer information
 LABEL maintainer="ashis.ravindran@dkfz-heidelberg.de"
-LABEL version="1.0"
+LABEL version="1.0.0"
 LABEL description="nnU-Net is a machine learning based semantic segmentation method."
 LABEL image.source="https://github.com/MIC-DKFZ/nnunet-eucaim-docker"
 LABEL image.revision="commit-sha"
-LABEL image.version="tag-or-version"
+LABEL image.version="1.0.0"
 ENV PYTHONUNBUFFERED=1
 
 # Set defaults for build arguments
@@ -21,10 +21,11 @@ ARG USER_GID=2323
 
 # Create non-root user and group, and prevent login
 RUN groupadd -g $USER_GID eucaim && \
-    useradd -l -r -u $USER_GID -g eucaim -d /home/eucaim -m -s /usr/sbin/nologin eucaim
+    useradd -l -r -u $USER_UID -g eucaim -d /home/eucaim -m -s /usr/sbin/nologin eucaim
 
 RUN apt-get update && apt-get install -y --no-install-recommends\
     git \
+    gosu \
     wget \
     python3 \
     python3-pip \
@@ -78,17 +79,19 @@ RUN git clone --branch nnunetv1 https://github.com/MIC-DKFZ/nnUNet.git ./nnunetv
 
 # Copy relevant files
 COPY start_nnunet.sh ./start_nnunet.sh
+COPY entrypoint.sh ./entrypoint.sh
 COPY nnunetv1.patch ./nnunetv1/nnunetv1.patch
 COPY scripts scripts
 
-RUN chown -R root:root /app && chmod 755 ./start_nnunet.sh
+RUN chown -R root:root /app && chmod 755 ./start_nnunet.sh ./entrypoint.sh
+RUN mkdir -p /sandbox
 
 # Install nnU-Net
 RUN cd nnunetv1 && git apply --ignore-space-change --ignore-whitespace nnunetv1.patch
 RUN pip3 install --no-cache-dir -e ./nnunetv1
 
-# Switch to eucaim user
-USER eucaim
+# No USER instruction: entrypoint.sh must start as root to remap the runtime
+# user and group, then drops privileges with gosu.
 WORKDIR /home/eucaim
 
 # Set env vars required by nnU-Net
@@ -96,5 +99,9 @@ ENV nnUNet_input="/home/eucaim/nnUNet_input"
 ENV nnUNet_output="/home/eucaim/nnUNet_output"
 ENV RESULTS_FOLDER="/home/eucaim/nnUNet_results_folder"
 
-RUN mkdir -p $nnUNet_input $nnUNet_output $RESULTS_FOLDER
+RUN mkdir -p $nnUNet_input $nnUNet_output $RESULTS_FOLDER \
+    && chown eucaim:eucaim $nnUNet_input $nnUNet_output
+
+ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["/bin/bash", "/app/start_nnunet.sh"]
 
